@@ -10,8 +10,8 @@
 #define SCL_2 23
 TwoWire I2Cone = TwoWire(0);
 TwoWire I2Ctwo = TwoWire(1);
-#define BNO055_SAMPLERATE_DELAY_MS (200)
-#define sensor1 25
+#define BNO055_SAMPLERATE_DELAY_MS (100)
+#define sensor1 26
 //here we setup the two bno sensors to use the different lines. Notice that they have the same address
 //which is okay
 //since they communicate on different lines.
@@ -91,7 +91,7 @@ void loop() {
     Serial.print(euler2.z() + 90);
     Serial.println("\n");
   }
-  
+
   float force1_reading = abs(analogRead(sensor1));
   Serial.print("Toe Sensor: ");
   Serial.println(force1_reading);
