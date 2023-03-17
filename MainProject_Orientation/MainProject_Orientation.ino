@@ -2,6 +2,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
+#include "BluetoothSerial.h"
 //For one I2C line in Parm’s tutorials we have -> data is blue and pin 21, clock is yellow and pin 22
 #define SDA_1 21
 #define SCL_1 22
@@ -13,7 +14,7 @@ TwoWire I2Ctwo = TwoWire(1);
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 #define sensor1 26
 
-
+BluetoothSerial SerialBT
 #include <HX711_ADC.h>
 #if defined(ESP8266)|| defined(ESP32) || defined(AVR)
 #include <EEPROM.h>
@@ -34,37 +35,38 @@ unsigned long t = 0;
 Adafruit_BNO055 bno1 = Adafruit_BNO055(55, 0x28, &I2Cone);
 Adafruit_BNO055 bno2 = Adafruit_BNO055(55, 0x28, &I2Ctwo);
 void setup() {
+  SerialBT.begin("ESP32-Bluetooth"));
   Serial.begin(115200);
-  Serial.println(F("Two BNO test"));
+  SerialBT.println(F("Two BNO test"));
   //have I2C communication begin and tell I2Cone and I2Ctwo which lines are being used.
   I2Cone.begin(SDA_1, SCL_1, 100000);
   I2Ctwo.begin(SDA_2, SCL_2, 100000);
   //check if you wired it correctly. If not you will constantly print what is below
   bool status1 = bno1.begin();
   if (!status1) {
-    Serial.println("Could not find a valid Bno_1 sensor, check wiring!");
+    SerialBT.println("Could not find a valid Bno_1 sensor, check wiring!");
     while (1)
       ;
   }
   bool status2 = bno2.begin();
   if (!status2) {
-    Serial.println("Could not find a valid Bno_2 sensor, check wiring!");
+    SerialBT.println("Could not find a valid Bno_2 sensor, check wiring!");
     while (1)
       ;
   }
-  Serial.println();
+  SerialBT.println();
     LoadCell.begin();
   //LoadCell.setReverseOutput(); //uncomment to turn a negative output value to positive
   unsigned long stabilizingtime = 2000; // preciscion right after power-up can be improved by adding a few seconds of stabilizing time
   boolean _tare = true; //set this to false if you don't want tare to be performed in the next step
   LoadCell.start(stabilizingtime, _tare);
   if (LoadCell.getTareTimeoutFlag() || LoadCell.getSignalTimeoutFlag()) {
-    Serial.println("Timeout, check MCU>HX711 wiring and pin designations");
+    SerialBT.println("Timeout, check MCU>HX711 wiring and pin designations");
     while (1);
   }
   else {
     LoadCell.setCalFactor(1.0); // user set calibration value (float), initial value 1.0 may be used for this sketch
-    Serial.println("Startup is complete");
+    SerialBT.println("Startup is complete");
   }
   while (!LoadCell.update());
   calibrate(); //start calibration procedure
@@ -84,7 +86,7 @@ void loop() {
   bno2.getCalibration(&system2, &gyro2, &accel2, &mag2);
 
 
-  Serial.print("\nKnee Flexion Angle:\t\t    Hip Flexion Angle:\n");
+  SerialBT.print("\nKnee Flexion Angle:\t\t    Hip Flexion Angle:\n");
   // Serial.print("Sys1=");  //displaying the calibration values for first sensor (int values, range from 0-3)
   // Serial.print(system1, DEC);
   // Serial.print(", Gyro1=");
@@ -113,8 +115,8 @@ void loop() {
   if (newDataReady) {
     if (millis() > t + serialPrintInterval) {
       float i = LoadCell.getData();
-      Serial.print("Load_cell output val: ");
-      Serial.println(i);
+      SerialBT.print("Load_cell output val: ");
+      SerialBT.println(i);
       newDataReady = 0;
       t = millis();
     }
@@ -130,40 +132,40 @@ void loop() {
 
   // check if last tare operation is complete
   if (LoadCell.getTareStatus() == true) {
-    Serial.println("Tare complete");
+    SerialBT.println("Tare complete");
   }
 //KNEE
   if (gyro1 == 3 && euler1.x() != 0 && euler1.y() != 0 && euler1.z() != 0) {
     if (euler1.z() >= 0) {
-      Serial.print("   θ1: ");
-      Serial.print(euler1.z() - 90);
-      Serial.print("\t\t\t\t ");
+      SerialBT.print("   θ1: ");
+      SerialBT.print(euler1.z() - 90);
+      SerialBT.print("\t\t\t\t ");
     } 
     else {
-      Serial.print("   θ1: ");
-      Serial.print(euler1.z() + 270);
-      Serial.print("\t\t\t\t ");
+      SerialBT.print("   θ1: ");
+      SerialBT.print(euler1.z() + 270);
+      SerialBT.print("\t\t\t\t ");
     }
   }
   //HIP
   if (gyro2 == 3 && euler2.x() != 0 && euler2.y() != 0 && euler2.z() != 0) {
-    Serial.print("θ2: ");
-    Serial.print(euler2.z() + 90);
-    Serial.println("\n");
+    SerialBT.print("θ2: ");
+    SerialBT.print(euler2.z() + 90);
+    SerialBT.println("\n");
   }
 
   float force1_reading = abs(analogRead(sensor1));
-  Serial.print("Toe Sensor: ");
-  Serial.println(force1_reading);
+  SerialBT.print("Toe Sensor: ");
+  SerialBT.println(force1_reading);
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }
 
 void calibrate() {
-  Serial.println("***");
-  Serial.println("Start calibration:");
-  Serial.println("Place the load cell an a level stable surface.");
-  Serial.println("Remove any load applied to the load cell.");
-  Serial.println("Send 't' from serial monitor to set the tare offset.");
+  SerialBT.println("***");
+  SerialBT.println("Start calibration:");
+  SerialBT.println("Place the load cell an a level stable surface.");
+  SerialBT.println("Remove any load applied to the load cell.");
+  SerialBT.println("Send 't' from serial monitor to set the tare offset.");
 
   boolean _resume = false;
   while (_resume == false) {
@@ -175,13 +177,13 @@ void calibrate() {
       }
     }
     if (LoadCell.getTareStatus() == true) {
-      Serial.println("Tare complete");
+      SerialBT.println("Tare complete");
       _resume = true;
     }
   }
 
-  Serial.println("Now, place your known mass on the loadcell.");
-  Serial.println("Then send the weight of this mass (i.e. 100.0) from serial monitor.");
+  SerialBT.println("Now, place your known mass on the loadcell.");
+  SerialBT.println("Then send the weight of this mass (i.e. 100.0) from serial monitor.");
 
   float known_mass = 0;
   _resume = false;
@@ -190,8 +192,8 @@ void calibrate() {
     if (Serial.available() > 0) {
       known_mass = Serial.parseFloat();
       if (known_mass != 0) {
-        Serial.print("Known mass is: ");
-        Serial.println(known_mass);
+        SerialBT.print("Known mass is: ");
+        SerialBT.println(known_mass);
         _resume = true;
       }
     }
@@ -200,12 +202,12 @@ void calibrate() {
   LoadCell.refreshDataSet(); //refresh the dataset to be sure that the known mass is measured correct
   float newCalibrationValue = LoadCell.getNewCalibration(known_mass); //get the new calibration value
 
-  Serial.print("New calibration value has been set to: ");
-  Serial.print(newCalibrationValue);
-  Serial.println(", use this as calibration value (calFactor) in your project sketch.");
-  Serial.print("Save this value to EEPROM adress ");
-  Serial.print(calVal_eepromAdress);
-  Serial.println("? y/n");
+  SerialBT.print("New calibration value has been set to: ");
+  SerialBT.print(newCalibrationValue);
+  SerialBT.println(", use this as calibration value (calFactor) in your project sketch.");
+  SerialBT.print("Save this value to EEPROM adress ");
+  SerialBT.print(calVal_eepromAdress);
+  SerialBT.println("? y/n");
 
   _resume = false;
   while (_resume == false) {
@@ -220,50 +222,50 @@ void calibrate() {
         EEPROM.commit();
 #endif
         EEPROM.get(calVal_eepromAdress, newCalibrationValue);
-        Serial.print("Value ");
-        Serial.print(newCalibrationValue);
-        Serial.print(" saved to EEPROM address: ");
-        Serial.println(calVal_eepromAdress);
+        SerialBT.print("Value ");
+        SerialBT.print(newCalibrationValue);
+        SerialBT.print(" saved to EEPROM address: ");
+        SerialBT.println(calVal_eepromAdress);
         _resume = true;
 
       }
       else if (inByte == 'n') {
-        Serial.println("Value not saved to EEPROM");
+        SerialBT.println("Value not saved to EEPROM");
         _resume = true;
       }
     }
   }
 
-  Serial.println("End calibration");
-  Serial.println("***");
-  Serial.println("To re-calibrate, send 'r' from serial monitor.");
-  Serial.println("For manual edit of the calibration value, send 'c' from serial monitor.");
-  Serial.println("***");
+  SerialBT.println("End calibration");
+  SerialBT.println("***");
+  SerialBT.println("To re-calibrate, send 'r' from serial monitor.");
+  SerialBT.println("For manual edit of the calibration value, send 'c' from serial monitor.");
+  SerialBT.println("***");
 }
 
 void changeSavedCalFactor() {
   float oldCalibrationValue = LoadCell.getCalFactor();
   boolean _resume = false;
-  Serial.println("***");
-  Serial.print("Current value is: ");
-  Serial.println(oldCalibrationValue);
-  Serial.println("Now, send the new value from serial monitor, i.e. 696.0");
+  SerialBT.println("***");
+  SerialBT.print("Current value is: ");
+  SerialBT.println(oldCalibrationValue);
+  SerialBT.println("Now, send the new value from serial monitor, i.e. 696.0");
   float newCalibrationValue;
   while (_resume == false) {
     if (Serial.available() > 0) {
       newCalibrationValue = Serial.parseFloat();
       if (newCalibrationValue != 0) {
-        Serial.print("New calibration value is: ");
-        Serial.println(newCalibrationValue);
+        SerialBT.print("New calibration value is: ");
+        SerialBT.println(newCalibrationValue);
         LoadCell.setCalFactor(newCalibrationValue);
         _resume = true;
       }
     }
   }
   _resume = false;
-  Serial.print("Save this value to EEPROM adress ");
-  Serial.print(calVal_eepromAdress);
-  Serial.println("? y/n");
+  SerialBT.print("Save this value to EEPROM adress ");
+  SerialBT.print(calVal_eepromAdress);
+  SerialBT.println("? y/n");
   while (_resume == false) {
     if (Serial.available() > 0) {
       char inByte = Serial.read();
@@ -276,18 +278,18 @@ void changeSavedCalFactor() {
         EEPROM.commit();
 #endif
         EEPROM.get(calVal_eepromAdress, newCalibrationValue);
-        Serial.print("Value ");
-        Serial.print(newCalibrationValue);
-        Serial.print(" saved to EEPROM address: ");
-        Serial.println(calVal_eepromAdress);
+        SerialBT.print("Value ");
+        SerialBT.print(newCalibrationValue);
+        SerialBT.print(" saved to EEPROM address: ");
+        SerialBT.println(calVal_eepromAdress);
         _resume = true;
       }
       else if (inByte == 'n') {
-        Serial.println("Value not saved to EEPROM");
+        SerialBT.println("Value not saved to EEPROM");
         _resume = true;
       }
     }
   }
-  Serial.println("End change calibration value");
-  Serial.println("***");
+  SerialBT.println("End change calibration value");
+  SerialBT.println("***");
 }
