@@ -60,4 +60,4 @@ button3 = Button(root, text='Toe Pressure', command=graph3)
 button3.pack()
 
 
-oot.mainloop()
+root.mainloop()
