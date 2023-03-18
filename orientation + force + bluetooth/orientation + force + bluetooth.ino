@@ -1,8 +1,10 @@
 #include <Wire.h>
+
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include "BluetoothSerial.h"
+
 //For one I2C line in Parm’s tutorials we have -> data is blue and pin 21, clock is yellow and pin 22
 #define SDA_1 21
 #define SCL_1 22
@@ -19,6 +21,7 @@ BluetoothSerial SerialBT;
 //since they communicate on different lines.
 Adafruit_BNO055 bno1 = Adafruit_BNO055(55, 0x28, &I2Cone);
 Adafruit_BNO055 bno2 = Adafruit_BNO055(55, 0x28, &I2Ctwo);
+
 void setup() {
   SerialBT.begin("ESP32-Bluetooth");
   Serial.begin(115200);
@@ -56,7 +59,7 @@ void loop() {
   bno2.getCalibration(&system2, &gyro2, &accel2, &mag2);
 
 
-  SerialBT.print("\nKnee Flexion Angle:\t\t    Hip Flexion Angle:\n");
+  //SerialBT.print("\nKnee Flexion Angle:\t\t    Hip Flexion Angle:\n");
   // Serial.print("Sys1=");  //displaying the calibration values for first sensor (int values, range from 0-3)
   // Serial.print(system1, DEC);
   // Serial.print(", Gyro1=");
@@ -75,28 +78,31 @@ void loop() {
   // Serial.print(", Mag2=");
   // Serial.print(mag2, DEC);
   // Serial.print("\t\t\t");
+
+
+
 //KNEE
   if (gyro1 == 3 && euler1.x() != 0 && euler1.y() != 0 && euler1.z() != 0) {
     if (euler1.z() >= 0) {
-      SerialBT.print("   θ1: ");
+      //SerialBT.print("   θ1: ");
       SerialBT.print(euler1.z() - 90);
-      SerialBT.print("\t\t\t\t ");
+      SerialBT.print(",");
     } 
     else {
-      SerialBT.print("   θ1: ");
+      //SerialBT.print("   θ1: ");
       SerialBT.print(euler1.z() + 270);
-      SerialBT.print("\t\t\t\t ");
+      SerialBT.print(",");
     }
   }
   //HIP
   if (gyro2 == 3 && euler2.x() != 0 && euler2.y() != 0 && euler2.z() != 0) {
-    SerialBT.print("θ2: ");
+    //SerialBT.print("θ2: ");
     SerialBT.print(euler2.z() + 90);
-    SerialBT.println("\n");
+    SerialBT.print(",");
   }
 
   float force1_reading = abs(analogRead(sensor1));
-  SerialBT.print("Toe Sensor: ");
+  //SerialBT.print("Toe Sensor: ");
   SerialBT.println(force1_reading);
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }
