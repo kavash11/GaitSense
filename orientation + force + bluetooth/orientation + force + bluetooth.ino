@@ -14,7 +14,8 @@
 TwoWire I2Cone = TwoWire(0);
 TwoWire I2Ctwo = TwoWire(1);
 #define BNO055_SAMPLERATE_DELAY_MS (100)
-#define sensor1 26
+#define sensor1 25
+#define sensor2 26
 BluetoothSerial SerialBT;
 //here we setup the two bno sensors to use the different lines. Notice that they have the same address
 //which is okay
@@ -103,6 +104,10 @@ void loop() {
 
   float force1_reading = abs(analogRead(sensor1));
   //SerialBT.print("Toe Sensor: ");
-  SerialBT.println(force1_reading);
+  SerialBT.print(force1_reading);
+  SerialBT.print(",");
+
+  float force2_reading = abs(4095-analogRead(sensor2));
+  SerialBT.println(force2_reading);
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }
