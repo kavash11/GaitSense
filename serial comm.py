@@ -17,16 +17,30 @@ def main():
     ser.reset_output_buffer()
     ser.reset_input_buffer()
     
-    data_array = []
-    time_array = []
+    knee=[]
+    hip=[]
+    toe=[]
 
     t0 = time.time()
 
     while True:
         data = ser.readline()
         #data = data.decode("utf-8")
+        
         data = data.strip()
-        print(data)
+        data = str(data)
+        data= data[2:-1]
+        data = list(map(str.strip, data.split(',')))
+        knee.append[float(data[0])] #CAUSING ERROR
+        #data=data.split(",")
+        #print(data.split(","))
+        #knee.append(data[0])
+        #pp.plot(time,knee, label = 'Knee Flexion')
+        #pp.xlabel('Time')
+        #pp.ylabel('Angle')
+        #pp.title('Knee Flexion')
+        #pp.show()
+        print(knee)
     ser.close()
 
 main()
