@@ -2,11 +2,11 @@ import serial
 import numpy as np
 import csv
 import time
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as pp
 import datetime
 
 def main():
-    serial_port='COM10'
+    serial_port='COM6'
     baud_rate = 115200
     ser = serial.Serial(serial_port, baud_rate)
 
@@ -20,6 +20,7 @@ def main():
     knee=[]
     hip=[]
     toe=[]
+    heel=[]
 
     t0 = time.time()
 
@@ -31,16 +32,19 @@ def main():
         data = str(data)
         data= data[2:-1]
         data = list(map(str.strip, data.split(',')))
-        knee.append[float(data[0])] #CAUSING ERROR
+        knee.append(float(data[0]))
+        hip.append(float(data[1]))
+        toe.append(float(data[2]))
+        heel.append(float(data[3]))
         #data=data.split(",")
         #print(data.split(","))
         #knee.append(data[0])
-        #pp.plot(time,knee, label = 'Knee Flexion')
+        #pp.plot(len(knee),knee, label = 'Knee Flexion')
         #pp.xlabel('Time')
         #pp.ylabel('Angle')
         #pp.title('Knee Flexion')
         #pp.show()
-        print(knee)
+        print(heel)
     ser.close()
 
 main()

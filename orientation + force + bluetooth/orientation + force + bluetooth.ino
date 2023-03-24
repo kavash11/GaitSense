@@ -107,7 +107,7 @@ void loop() {
   SerialBT.print(force1_reading);
   SerialBT.print(",");
 
-  float force2_reading = abs(4095-analogRead(sensor2));
+  float force2_reading = abs(analogRead(sensor2));
   SerialBT.println(force2_reading);
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }
