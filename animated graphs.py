@@ -88,7 +88,7 @@ def getToe(i2):
     knee.append(float(data[0]))
     hip.append(float(data[1]))
     toe.append(float(data[2]))
-    heel.append(float(data[3]))
+       # heel.append(float(data[3]))
     
     count.append(i2)
     print (count, toe)
@@ -156,11 +156,8 @@ count = []
 def main():
     root = tk.Tk()
     root.geometry("400x200")
-    button1 = Button(root, text='Knee Flexion', command=graph(getKnee))
-    button1.pack()
-    button2 = Button(root, text='Hip Flexion', command=graph(getHip))
-    button2.pack()
-    button3 = Button(root, text='Toe Pressure', command=graph(getToe))
+
+    button3 = Button(root, text='Toe Pressure', command=graph(getToe)) #buttons raen't working, graphs both sensors on same line on same plot
     button3.pack()
     button4 = Button(root, text='Heel Pressure', command=graph(getHeel))
     button4.pack()
