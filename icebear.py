@@ -1,4 +1,5 @@
 import matplotlib
+import matplotlib.pyplot as plt
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -61,6 +62,7 @@ def animateKnee(i):
 ##            yList.append(int(y))
     a.clear()
     a.plot(count1,knee)
+    a.set_xlim(left=max(0,i-10),right=i+10)
 
 def animateHip(i1):
     ser.reset_output_buffer()
@@ -86,7 +88,7 @@ def animateHip(i1):
 ##            yList.append(int(y))
     a1.clear()
     a1.plot(count1,knee)
-            
+    a1.set_xlim(left=max(0,i1-10),right=i1+10)    
 
 class cerebral(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -135,6 +137,7 @@ class PageTwo(tk.Frame):
 
         button1 = ttk.Button(self, text="Home", command=lambda:controller.show_frame(StartPage))
         button1.pack()
+
         
         canvas1 = FigureCanvasTkAgg(f1, self)
         ani1=animation.FuncAnimation(f1, animateHip, interval=1000)
@@ -151,7 +154,7 @@ class PageThree(tk.Frame):
         button1 = ttk.Button(self, text="Home", command=lambda:controller.show_frame(StartPage))
         button1.pack()
 
-
+        
 
         canvas = FigureCanvasTkAgg(f, self)
         ani=animation.FuncAnimation(f, animateKnee, interval=1000)
@@ -159,11 +162,11 @@ class PageThree(tk.Frame):
         
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         
-    #def displayKnee(self):
+
         
-        
+
         
 app=cerebral()
 #animateData()
-#ani1=animation.FuncAnimation(f1, animateHip, interval=1000)
+
 app.mainloop()
