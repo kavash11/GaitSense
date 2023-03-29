@@ -117,16 +117,20 @@ class cerebral(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent)
+       # canvas= tk.Canvas(width= 600, height= 400, bg='black')
+        
         label = ttk.Label(self, text="Home", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-
+        #img = ImageTk.PhotoImage(Image.open("icebear.jpg"))
         button1 = ttk.Button(self, text="Foot Pressure", command=lambda:controller.show_frame(PageOne))
         button1.pack()
         button2 = ttk.Button(self, text="Hip Flexion", command=lambda:controller.show_frame(PageTwo))
         button2.pack()
         button3 = ttk.Button(self, text="Knee Flexion", command=lambda:controller.show_frame(PageThree))
         button3.pack()
-        img = ImageTk.PhotoImage(Image.open("forest.jpg"))
+        img = ImageTk.PhotoImage(Image.open("icebear.jpg"))
+        #canvas.create_image(10,10,image=img)
+        #canvas.pack()
 
 class PageOne(tk.Frame):
     def __init__(self, parent, controller):
