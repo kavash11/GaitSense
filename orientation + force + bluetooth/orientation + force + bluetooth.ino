@@ -24,7 +24,7 @@ Adafruit_BNO055 bno1 = Adafruit_BNO055(55, 0x28, &I2Cone);
 Adafruit_BNO055 bno2 = Adafruit_BNO055(55, 0x28, &I2Ctwo);
 
 void setup() {
-  SerialBT.begin("ESP32-Bluetooth");
+  SerialBT.begin("Icebear");
   Serial.begin(115200);
   SerialBT.println(F("Two BNO test"));
   //have I2C communication begin and tell I2Cone and I2Ctwo which lines are being used.

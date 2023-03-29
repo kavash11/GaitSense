@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, Text
+from tkinter import ttk
 from tkinter import *
 import os
 import serial
@@ -7,6 +7,7 @@ import numpy as np
 import csv
 import time
 import matplotlib.pyplot as pp
+
 import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -109,10 +110,11 @@ count4 = []
 plotanimation1 = animation.FuncAnimation(fig, getKnee, interval=100)
 pp.show()
 canvas = FigureCanvasTkAgg(plotanimation1, master=root)
+canvas.draw()
 canvas.get_tk_widget().pack()
 frame = tk.Frame(root)
 frame.pack()
-root.mainloop()
+tk.mainloop()
 ##def main():
 # root = tk.Tk()
 #  root.geometry("400x200")
