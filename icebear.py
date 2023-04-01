@@ -12,7 +12,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 
-ser = serial.Serial('COM6',115200)
+ser = serial.Serial('COM10',115200)
 
 LARGE_FONT=("Arial", 12)
 style.use("ggplot")
@@ -53,7 +53,7 @@ def animateKnee(i):
     a.clear()
     a.plot(count1,knee)
     a.set_xlim(left=max(0,i-10),right=i+10) #moves axis
-    a.set_ylim([-20,200])
+    a.set_ylim([0,50])
     a.set_xlabel("Time (s)")
     a.set_ylabel("Angle (Degrees)")
     a.set_title('Knee Flexion')
@@ -78,7 +78,7 @@ def animateHip(i1):
     a1.clear()
     a1.plot(count2,hip)
     a1.set_xlim(left=max(0,i1-10),right=i1+10)
-    a1.set_ylim([-20,200])
+    a1.set_ylim([0,50])
     a1.set_xlabel("Time (s)")
     a1.set_ylabel("Angle (Degrees)")
     a1.set_title('Hip Flexion')
@@ -134,33 +134,22 @@ class cerebral(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent)
-        #canvas= tk.Canvas(width= 600, height= 400, bg='black')
-        #frame = tk.Frame(app, width=600, height=400)
-        #frame.pack()
         label = ttk.Label(self, text="Home", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        #img = ImageTk.PhotoImage(Image.open("icebear.jpg"))
         button1 = ttk.Button(self, text="Foot Pressure", command=lambda:controller.show_frame(PageOne))
         button1.pack()
         button2 = ttk.Button(self, text="Hip Flexion", command=lambda:controller.show_frame(PageTwo))
         button2.pack()
         button3 = ttk.Button(self, text="Knee Flexion", command=lambda:controller.show_frame(PageThree))
         button3.pack()
-        #img = ImageTk.PhotoImage(Image.open("icebear.jpg"))
-        #canvas.create_image(10,10,image=img)
-        #canvas.pack()
-        #label = tk.Label(frame, image=img)
-        #label.pack()
 
 class PageOne(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
         label = ttk.Label(self, text="Foot Pressure", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-
         button1 = ttk.Button(self, text="Home", command=lambda:controller.show_frame(StartPage))
         button1.pack()
-
         canvas2 = FigureCanvasTkAgg(f2, self)
         ani2=animation.FuncAnimation(f2, foot, interval=1000)
         canvas2.draw()
@@ -171,11 +160,8 @@ class PageTwo(tk.Frame):
         tk.Frame.__init__(self,parent)
         label = ttk.Label(self, text="Hip Flexion", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-
         button1 = ttk.Button(self, text="Home", command=lambda:controller.show_frame(StartPage))
         button1.pack()
-
-        
         canvas1 = FigureCanvasTkAgg(f1, self)
         ani1=animation.FuncAnimation(f1, animateHip, interval=1000)
         canvas1.draw()
@@ -191,8 +177,6 @@ class PageThree(tk.Frame):
         button1 = ttk.Button(self, text="Home", command=lambda:controller.show_frame(StartPage))
         button1.pack()
 
-        
-
         canvas = FigureCanvasTkAgg(f, self)
         ani=animation.FuncAnimation(f, animateKnee, interval=1000)
         canvas.draw()
@@ -200,10 +184,7 @@ class PageThree(tk.Frame):
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         
 
-        
-
+    
         
 app=cerebral()
-#animateData()
-
 app.mainloop()
