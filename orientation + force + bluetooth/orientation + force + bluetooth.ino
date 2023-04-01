@@ -84,21 +84,14 @@ void loop() {
 
 //KNEE
   if (gyro1 == 3 && euler1.x() != 0 && euler1.y() != 0 && euler1.z() != 0) {
-    if (euler1.z() >= 0) {
-      //SerialBT.print("   θ1: ");
-      SerialBT.print(euler1.z() - 90);
+      SerialBT.print(euler1.z()-90);
       SerialBT.print(",");
-    } 
-    else {
-      //SerialBT.print("   θ1: ");
-      SerialBT.print(euler1.z() + 270);
-      SerialBT.print(",");
-    }
+  
   }
   //HIP
   if (gyro2 == 3 && euler2.x() != 0 && euler2.y() != 0 && euler2.z() != 0) {
     //SerialBT.print("θ2: ");
-    SerialBT.print(euler2.z() + 90);
+    SerialBT.print(abs(euler2.z()-90));
     SerialBT.print(",");
   }
 

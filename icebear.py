@@ -42,13 +42,18 @@ def animateKnee(i):
     data= data[2:-1]
     data = list(map(str.strip, data.split(',')))
 
-    knee.append(float(data[0]))
+    if (float(data[0]) != None):
+        knee.append(float(data[0]))
+
+    else :
+        knee.append(0)
+
     count1.append(i)
     i+=1
-
     a.clear()
     a.plot(count1,knee)
     a.set_xlim(left=max(0,i-10),right=i+10) #moves axis
+    a.set_ylim([-20,200])
     a.set_xlabel("Time (s)")
     a.set_ylabel("Angle (Degrees)")
     a.set_title('Knee Flexion')
@@ -61,14 +66,17 @@ def animateHip(i1):
     data = str(data)
     data= data[2:-1]
     data = list(map(str.strip, data.split(',')))
-
-    hip.append(float(data[1]))
+    if len(data) == 4:    
+        hip.append(float(data[1]))
+    elif len(data) == 3:
+        hip.append(float(data[0]))
     count2.append(i1)
     i1+=1
     
     a1.clear()
     a1.plot(count2,hip)
     a1.set_xlim(left=max(0,i1-10),right=i1+10)
+    a1.set_ylim([-20,200])
     a1.set_xlabel("Time (s)")
     a1.set_ylabel("Angle (Degrees)")
     a1.set_title('Hip Flexion')
@@ -81,9 +89,15 @@ def foot(i2):
     data = str(data)
     data= data[2:-1]
     data = list(map(str.strip, data.split(',')))
-
-    toe.append(float(data[2]))
-    heel.append(float(data[3]))
+    if len(data) == 4:
+        toe.append(float(data[2]))
+        heel.append(float(data[3]))
+    elif len(data) == 3:
+        toe.append(float(data[1]))
+        heel.append(float(data[2]))
+    elif len(data) == 2:
+        toe.append(float(data[0]))
+        heel.append(float(data[1]))
     count3.append(i2)
     i2+=1
     
@@ -91,6 +105,7 @@ def foot(i2):
     a2.plot(count3,toe, label = "Toe")
     a2.plot(count3,heel, label="Heel")
     a2.set_xlim(left=max(0,i2-10),right=i2+10)
+    a2.set_ylim([0,5000])
     a2.set_xlabel("Time (s)")
     a2.set_ylabel("Pressure (V)")
     a2.set_title('Foot Pressure')
@@ -117,8 +132,9 @@ class cerebral(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent)
-       # canvas= tk.Canvas(width= 600, height= 400, bg='black')
-        
+        #canvas= tk.Canvas(width= 600, height= 400, bg='black')
+        #frame = tk.Frame(app, width=600, height=400)
+        #frame.pack()
         label = ttk.Label(self, text="Home", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
         #img = ImageTk.PhotoImage(Image.open("icebear.jpg"))
@@ -128,9 +144,11 @@ class StartPage(tk.Frame):
         button2.pack()
         button3 = ttk.Button(self, text="Knee Flexion", command=lambda:controller.show_frame(PageThree))
         button3.pack()
-        img = ImageTk.PhotoImage(Image.open("icebear.jpg"))
+        #img = ImageTk.PhotoImage(Image.open("icebear.jpg"))
         #canvas.create_image(10,10,image=img)
         #canvas.pack()
+        #label = tk.Label(frame, image=img)
+        #label.pack()
 
 class PageOne(tk.Frame):
     def __init__(self, parent, controller):
