@@ -42,7 +42,7 @@ def animateKnee(i):
     data= data[2:-1]
     data = list(map(str.strip, data.split(',')))
 
-    if (float(data[0]) != None):
+    if (len(data)==4):
         knee.append(float(data[0]))
 
     else :
@@ -70,6 +70,8 @@ def animateHip(i1):
         hip.append(float(data[1]))
     elif len(data) == 3:
         hip.append(float(data[0]))
+    else:
+        hip.append(0)
     count2.append(i1)
     i1+=1
     
