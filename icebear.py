@@ -12,7 +12,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 
-ser = serial.Serial('COM10',115200)
+
 
 LARGE_FONT=("Arial", 12)
 style.use("ggplot")
@@ -31,6 +31,8 @@ hip=[]
 count3=[]
 toe=[]
 heel=[]
+
+ser = serial.Serial('COM10',115200)
 
 
 def animateKnee(i):
@@ -57,6 +59,10 @@ def animateKnee(i):
     a.set_xlabel("Time (s)")
     a.set_ylabel("Angle (Degrees)")
     a.set_title('Knee Flexion')
+
+
+    
+    
 
 def animateHip(i1):
     ser.reset_output_buffer()
@@ -130,6 +136,8 @@ class cerebral(tk.Tk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+        
+
 
 class StartPage(tk.Frame):
     def __init__(self,parent,controller):
@@ -142,6 +150,8 @@ class StartPage(tk.Frame):
         button2.pack()
         button3 = ttk.Button(self, text="Knee Flexion", command=lambda:controller.show_frame(PageThree))
         button3.pack()
+
+        
 
 class PageOne(tk.Frame):
     def __init__(self, parent, controller):
@@ -185,6 +195,7 @@ class PageThree(tk.Frame):
         
 
     
-        
+     
 app=cerebral()
-app.mainloop()
+
+app.mainloop() 
