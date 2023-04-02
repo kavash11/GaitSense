@@ -32,7 +32,7 @@ count3=[]
 toe=[]
 heel=[]
 
-ser = serial.Serial('COM10',115200)
+ser = serial.Serial('COM6',115200)
 
 
 def animateKnee(i):
@@ -54,8 +54,8 @@ def animateKnee(i):
     i+=1
     a.clear()
     a.plot(count1,knee)
-    a.set_xlim(left=max(0,i-10),right=i+10) #moves axis
-    a.set_ylim([0,50])
+    a.set_xlim(left=max(0,i-10),right=i+10) #CHANGE X AXIS VALUES
+    a.set_ylim([80,180])
     a.set_xlabel("Time (s)")
     a.set_ylabel("Angle (Degrees)")
     a.set_title('Knee Flexion')
@@ -84,7 +84,7 @@ def animateHip(i1):
     a1.clear()
     a1.plot(count2,hip)
     a1.set_xlim(left=max(0,i1-10),right=i1+10)
-    a1.set_ylim([0,50])
+    a1.set_ylim([80,180])
     a1.set_xlabel("Time (s)")
     a1.set_ylabel("Angle (Degrees)")
     a1.set_title('Hip Flexion')
@@ -114,7 +114,7 @@ def foot(i2):
     a2.plot(count3,heel, label="Heel")
     a2.set_xlim(left=max(0,i2-10),right=i2+10)
     a2.set_ylim([0,5000])
-    a2.set_xlabel("Time (s)")
+    a2.set_xlabel("Time (ms)")
     a2.set_ylabel("Pressure (V)")
     a2.set_title('Foot Pressure')
     a2.legend()

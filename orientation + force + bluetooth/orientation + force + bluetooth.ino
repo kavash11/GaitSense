@@ -13,7 +13,7 @@
 #define SCL_2 23
 TwoWire I2Cone = TwoWire(0);
 TwoWire I2Ctwo = TwoWire(1);
-#define BNO055_SAMPLERATE_DELAY_MS (10)
+#define BNO055_SAMPLERATE_DELAY_MS (1)
 #define sensor1 25
 #define sensor2 26
 BluetoothSerial SerialBT;
@@ -86,10 +86,10 @@ void loop() {
   int heel=0;
   for (int i=0; i<10; i++) {
     if (gyro1 == 3 && euler1.x() != 0 && euler1.y() != 0 && euler1.z() != 0) {
-      knee+= (euler1.z()-90);
+      knee+= abs((euler1.z()-270));
     }
     if (gyro2 == 3 && euler2.x() != 0 && euler2.y() != 0 && euler2.z() != 0) {
-      hip+=abs(euler2.z()-90);     
+      hip+=abs(euler2.z()+90);     
     }
     toe+=abs(analogRead(sensor1)); 
     heel+=abs(analogRead(sensor2));
