@@ -1,1 +1,2 @@
-# 3P04
+# GaitSense
+GaitSense is a wearable device used to monitor the user's gait live via a Python GUI, 2 FSRs, 2 BNO055s and an ESP32 Arduino. The user's hip flexion, knee flexion, toe pressure and heel pressure are quantified and graphed live on the GUI to quantitatively compare their gait to a healthy gait. This device is especially useful to monitor the improvement in gait in children with Cerebral Palsy after undergoing surgery.
